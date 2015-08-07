@@ -3,6 +3,7 @@ package com.bst;
 public class BinarySearchTree {
 
     private Node mRoot;
+    private int mSize;
 
     public BinarySearchTree() {
 
@@ -35,7 +36,14 @@ public class BinarySearchTree {
             } else {
                 parent.mRight = new Node(value);
             }
+            mSize++;
         }
+    }
+
+    public int[] toArray() {
+        int[] array = new int[mSize];
+
+        return array;
     }
 
     @Override
@@ -60,6 +68,7 @@ public class BinarySearchTree {
         return root1.mValue == root2.mValue && areTreesEqual(root1.mLeft, root2.mLeft) && areTreesEqual(root1.mRight, root2.mRight);
     }
 
+    // TODO: can I get rid of 17 and 31 * result;?
     @Override
     public int hashCode() {
         int result = 17;
@@ -86,6 +95,8 @@ public class BinarySearchTree {
         return builder.toString();
     }
 
+    // TODO: I need the same order for toArray(), and sumElements() sums the tree nodes up in the
+    // same order. How can I do these things without code duplication?
     private void inOrder(Node root, StringBuilder builder) {
         if (root != null) {
             inOrder(root.mLeft, builder);
