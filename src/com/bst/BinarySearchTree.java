@@ -1,49 +1,48 @@
 package com.bst;
 
+import java.util.LinkedList;
+
 public class BinarySearchTree {
 
     private Node mRoot;
-    private int mSize;
 
     public BinarySearchTree() {
 
     }
 
     public BinarySearchTree(int... values) {
-        if (values == null || values.length == 0) {
+        if (values == null) {
+            return;
+        }
+        if (values.length == 0) {
             throw new IllegalArgumentException("The array is null or empty");
         }
         insert(values);
     }
+    
+    // http://habrahabr.ru/post/150732/
+    private Node insert(Node root, int value) {
+        if (root == null) {
+            return new Node(value);
+        }
+        if (value < root.mValue) {
+            root.mLeft = insert(root.mLeft, value);
+        } else {
+            root.mRight = insert(root.mRight, value);
+        }
+        return balance(root);
+    }
+
+    
+    private Node balance(Node node) {
+        // TODO: 
+        return node;
+    }
 
     public void insert(int... values) {
         for (int value : values) {
-            Node current = mRoot;
-            Node parent = null;
-            while (current != null) {
-                parent = current;
-                if (value < current.mValue) {
-                    current = current.mLeft;
-                } else {
-                    current = current.mRight;
-                }
-            }
-            // The tree was empty.
-            if (parent == null) {
-                mRoot = new Node(value);
-            } else if (value < parent.mValue) {
-                parent.mLeft = new Node(value);
-            } else {
-                parent.mRight = new Node(value);
-            }
-            mSize++;
+
         }
-    }
-
-    public int[] toArray() {
-        int[] array = new int[mSize];
-
-        return array;
     }
 
     @Override
@@ -68,19 +67,25 @@ public class BinarySearchTree {
         return root1.mValue == root2.mValue && areTreesEqual(root1.mLeft, root2.mLeft) && areTreesEqual(root1.mRight, root2.mRight);
     }
 
-    // TODO: can I get rid of 17 and 31 * result;?
     @Override
     public int hashCode() {
-        int result = 17;
-        result = 31 * result + sumElements(mRoot);
-        return result;
-    }
-
-    private int sumElements(Node root) {
-        if (root == null) {
+        if (mRoot == null) {
             return 0;
         }
-        return root.mValue + sumElements(root.mLeft) + sumElements(root.mRight);
+        LinkedList<Node> nodes = new LinkedList<BinarySearchTree.Node>();
+        nodes.add(mRoot);
+        int res = 17;
+        while (!nodes.isEmpty()) {
+            Node head = nodes.remove();
+            res = 31 * res + head.hashCode();
+            if (head.mLeft != null) {
+                nodes.addLast(head.mLeft);
+            }
+            if (head.mRight != null) {
+                nodes.addLast(head.mRight);
+            }
+        }
+        return res;
     }
 
     @Override
@@ -89,30 +94,37 @@ public class BinarySearchTree {
             return "[]";
         }
         StringBuilder builder = new StringBuilder("[");
-        inOrder(mRoot, builder);
+        inOrderPrint(mRoot, builder);
         builder.setLength(builder.length() - 2);
         builder.append("]");
         return builder.toString();
     }
 
-    // TODO: I need the same order for toArray(), and sumElements() sums the tree nodes up in the
-    // same order. How can I do these things without code duplication?
-    private void inOrder(Node root, StringBuilder builder) {
+    private void inOrderPrint(Node root, StringBuilder builder) {
         if (root != null) {
-            inOrder(root.mLeft, builder);
+            inOrderPrint(root.mLeft, builder);
             builder.append(root + ", ");
-            inOrder(root.mRight, builder);
+            inOrderPrint(root.mRight, builder);
         }
     }
 
-    private class Node {
+    private static class Node {
 
         private Node mLeft;
         private Node mRight;
         private final int mValue;
+        private int mHeight;
 
         private Node(int value) {
-            this.mValue = value;
+            mValue = value;
+            mHeight = 1;
+        }
+
+        @Override
+        public int hashCode() {
+            int res = 17;
+            res = 17 * res + mValue;
+            return res;
         }
 
         @Override
