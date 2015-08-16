@@ -8,23 +8,9 @@ public class BinarySearchTreeTest {
     @Test
     public void testDefaultConstructor() {
         BinarySearchTree t1 = new BinarySearchTree();
-        Assert.assertEquals("[]", t1.toString());
-    }
+        // TODO: Don't rely on the result of toString(). Assert.isTrue(mRoot == null);
 
-    @Test
-    public void testArrayNull() {
-        BinarySearchTree t1 = new BinarySearchTree(null);
         Assert.assertEquals("[]", t1.toString());
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testArrayEmpty() {
-        BinarySearchTree t1 = new BinarySearchTree(new int[] {});
-    }
-    
-    @Test
-    public void testInsertRoot() {
-        new BinarySearchTree(new int[] {1});
     }
 //
 //    @Test

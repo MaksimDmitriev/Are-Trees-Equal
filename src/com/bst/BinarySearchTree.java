@@ -10,38 +10,75 @@ public class BinarySearchTree {
 
     }
 
-    public BinarySearchTree(int... values) {
-        if (values == null) {
-            return;
-        }
-        if (values.length == 0) {
-            throw new IllegalArgumentException("The array is null or empty");
-        }
-        insert(values);
+    public BinarySearchTree(int root) {
+        mRoot = new Node(root);
     }
-    
+
     // http://habrahabr.ru/post/150732/
-    private Node insert(Node root, int value) {
+    private Node insert(Node root, int key) {
         if (root == null) {
-            return new Node(value);
+            return new Node(key);
         }
-        if (value < root.mValue) {
-            root.mLeft = insert(root.mLeft, value);
+        if (key < root.mValue) {
+            root.mLeft = insert(root.mLeft, key);
         } else {
-            root.mRight = insert(root.mRight, value);
+            root.mRight = insert(root.mRight, key);
         }
         return balance(root);
     }
 
+    private Node balance(Node p) {
+        fixHeight(p);
+        if (bfactor(p) == 2) {
+            if (bfactor(p.mRight) < 0) {
+                p.mRight = rotateRight(p.mRight);
+            }
+            return rotateLeft(p);
+        }
+        if (bfactor(p) == -2) {
+            if (bfactor(p.mLeft) > 0) {
+                p.mLeft = rotateLeft(p.mLeft);
+            }
+            return rotateLeft(p);
+        }
+        return p;
+    }
     
-    private Node balance(Node node) {
-        // TODO: 
-        return node;
+    private Node rotateRight(Node p) {
+        Node q = p.mLeft;
+        p.mLeft = q.mRight;
+        q.mRight = p;
+        fixHeight(p);
+        fixHeight(q);
+        return q;
+    }
+    
+    private Node rotateLeft(Node q) {
+        Node p = q.mRight;
+        q.mRight = p.mLeft;
+        p.mLeft = q;
+        fixHeight(q);
+        fixHeight(p);
+        return p;
     }
 
-    public void insert(int... values) {
-        for (int value : values) {
+    private int height(Node p) {
+        return p == null ? 0 : p.mHeight;
+    }
+    
+    private int bfactor(Node p) {
+        return height(p.mRight) - height(p.mLeft);
+    }
 
+    private void fixHeight(Node p) {
+        int hl = height(p.mLeft);
+        int hr = height(p.mRight);
+        p.mHeight = (hl > hr ? hl : hr) + 1;
+    }
+
+    public void insert(int... keys) {
+        for (int value : keys) {
+            mRoot = insert(mRoot, value);
         }
     }
 
@@ -103,7 +140,7 @@ public class BinarySearchTree {
     private void inOrderPrint(Node root, StringBuilder builder) {
         if (root != null) {
             inOrderPrint(root.mLeft, builder);
-            builder.append(root + ", ");
+            builder.append(root + ":" + root.mHeight + ", ");
             inOrderPrint(root.mRight, builder);
         }
     }
