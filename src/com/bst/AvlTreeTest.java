@@ -45,38 +45,42 @@ public class AvlTreeTest {
     }
     
     @Test
-    public void testOneEmpty() {
+    public void testFirstEmpty() {
         AvlTree t1 = new AvlTree();
         AvlTree t2 = new AvlTree(1);
         Assert.assertNotEquals(t1, t2);
     }
     
     @Test
-    public void testOneEmpty() {
+    public void testSecondEmpty() {
         AvlTree t1 = new AvlTree(1);
         AvlTree t2 = new AvlTree();
         Assert.assertNotEquals(t1, t2);
     }
     
     @Test
-    public void testEqualOneNode() {
+    public void testRootEqual() {
         AvlTree t1 = new AvlTree(1);
         AvlTree t2 = new AvlTree(1);
         Assert.assertEquals(t1, t2);
     }
-//
-//    @Test
-//    public void testEqualRefs() {
-//        BinarySearchTree t1 = new BinarySearchTree();
-//        BinarySearchTree t2 = t1;
-//        Assert.assertTrue(t1.equals(t2));
-//    }
-//    
-//    @Test
-//    public void testEqulas() {
-//        BinarySearchTree t1 = new BinarySearchTree(new int[] {1, 2, 3});
-//        BinarySearchTree t2 = new BinarySearchTree(new int[] {1, 2, 3});
-//        Assert.assertTrue(t1.equals(t2));
-//    }
+    
+    @Test
+    public void testRootLeftEqual() {
+        AvlTree t1 = new AvlTree(10);
+        t1.insert(2);
+        AvlTree t2 = new AvlTree(10);
+        t2.insert(2);
+        Assert.assertEquals(t1, t2);
+    }
+    
+    @Test
+    public void testRootRightEqual() {
+        AvlTree t1 = new AvlTree(1);
+        t1.insert(2);
+        AvlTree t2 = new AvlTree(1);
+        t2.insert(2);
+        Assert.assertEquals(t1, t2);
+    }
 
 }
