@@ -2,19 +2,18 @@ package com.bst;
 
 import java.util.LinkedList;
 
-public class BinarySearchTree {
+public class AvlTree {
 
-    private Node mRoot;
+    Node mRoot;
 
-    public BinarySearchTree() {
+    public AvlTree() {
 
     }
 
-    public BinarySearchTree(int root) {
+    public AvlTree(int root) {
         mRoot = new Node(root);
     }
 
-    // http://habrahabr.ru/post/150732/
     private Node insert(Node root, int key) {
         if (root == null) {
             return new Node(key);
@@ -87,10 +86,10 @@ public class BinarySearchTree {
         if (this == arg0) {
             return true;
         }
-        if (!(arg0 instanceof BinarySearchTree)) {
+        if (!(arg0 instanceof AvlTree)) {
             return false;
         }
-        BinarySearchTree another = (BinarySearchTree) arg0;
+        AvlTree another = (AvlTree) arg0;
         return areTreesEqual(this.mRoot, another.mRoot);
     }
 
@@ -109,7 +108,7 @@ public class BinarySearchTree {
         if (mRoot == null) {
             return 0;
         }
-        LinkedList<Node> nodes = new LinkedList<BinarySearchTree.Node>();
+        LinkedList<Node> nodes = new LinkedList<AvlTree.Node>();
         nodes.add(mRoot);
         int res = 17;
         while (!nodes.isEmpty()) {
@@ -145,11 +144,11 @@ public class BinarySearchTree {
         }
     }
 
-    private static class Node {
+    static class Node {
 
         private Node mLeft;
         private Node mRight;
-        private final int mValue;
+        final int mValue;
         private int mHeight;
 
         private Node(int value) {
