@@ -38,7 +38,7 @@ public class AvlTree {
             if (bfactor(p.mLeft) > 0) {
                 p.mLeft = rotateLeft(p.mLeft);
             }
-            return rotateLeft(p);
+            return rotateRight(p);
         }
         return p;
     }
