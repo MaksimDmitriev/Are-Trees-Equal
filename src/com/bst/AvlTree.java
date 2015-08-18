@@ -139,15 +139,15 @@ public class AvlTree {
     private void inOrderPrint(Node root, StringBuilder builder) {
         if (root != null) {
             inOrderPrint(root.mLeft, builder);
-            builder.append(root + ":" + root.mHeight + ", ");
+            builder.append(root + ", ");
             inOrderPrint(root.mRight, builder);
         }
     }
 
     static class Node {
 
-        private Node mLeft;
-        private Node mRight;
+        Node mLeft;
+        Node mRight;
         final int mValue;
         private int mHeight;
 
