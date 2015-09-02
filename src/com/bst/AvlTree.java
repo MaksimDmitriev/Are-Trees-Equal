@@ -1,6 +1,7 @@
 package com.bst;
 
 import java.util.LinkedList;
+import java.util.Queue;
 
 public class AvlTree {
 
@@ -14,16 +15,16 @@ public class AvlTree {
         mRoot = new Node(root);
     }
 
-    private Node insert(Node root, int key) {
-        if (root == null) {
+    private Node insert(Node parent, int key) {
+        if (parent == null) {
             return new Node(key);
         }
-        if (key < root.mValue) {
-            root.mLeft = insert(root.mLeft, key);
-        } else {
-            root.mRight = insert(root.mRight, key);
+        if (key < parent.mValue) {
+            parent.mLeft = insert(parent.mLeft, key);
+        } else if (key > parent.mValue) {
+            parent.mRight = insert(parent.mRight, key);
         }
-        return balance(root);
+        return balance(parent);
     }
 
     private Node balance(Node p) {
@@ -89,8 +90,8 @@ public class AvlTree {
         if (!(arg0 instanceof AvlTree)) {
             return false;
         }
-        AvlTree another = (AvlTree) arg0;
-        return areTreesEqual(this.mRoot, another.mRoot);
+        AvlTree other = (AvlTree) arg0;
+        return areTreesEqual(this.mRoot, other.mRoot);
     }
 
     private boolean areTreesEqual(Node root1, Node root2) {
@@ -108,17 +109,17 @@ public class AvlTree {
         if (mRoot == null) {
             return 0;
         }
-        LinkedList<Node> nodes = new LinkedList<AvlTree.Node>();
+        Queue<Node> nodes = new LinkedList<AvlTree.Node>();
         nodes.add(mRoot);
         int res = 17;
         while (!nodes.isEmpty()) {
             Node head = nodes.remove();
             res = 31 * res + head.hashCode();
             if (head.mLeft != null) {
-                nodes.addLast(head.mLeft);
+                nodes.add(head.mLeft);
             }
             if (head.mRight != null) {
-                nodes.addLast(head.mRight);
+                nodes.add(head.mRight);
             }
         }
         return res;
