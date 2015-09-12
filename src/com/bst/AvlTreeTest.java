@@ -8,20 +8,20 @@ public class AvlTreeTest {
     @Test
     public void testDefaultConstructor() {
         AvlTree t1 = new AvlTree();
-        Assert.assertNull(t1.mRoot);
+        Assert.assertNull(t1.root);
     }
 
     @Test
     public void testIntegerConstructor() {
         AvlTree t1 = new AvlTree(1);
-        Assert.assertNotNull(t1.mRoot);
+        Assert.assertNotNull(t1.root);
     }
 
     @Test
     public void testInsertToEmptyTree() {
         AvlTree t1 = new AvlTree();
         t1.insert(1);
-        Assert.assertEquals(1, t1.mRoot.mValue);
+        Assert.assertEquals(1, t1.root.key);
     }
 
     @Test
@@ -132,42 +132,42 @@ public class AvlTreeTest {
     public void testToStringManyNodes() {
         AvlTree t1 = new AvlTree(1);
         t1.insert(12, 56, 7, 2, 1);
-        Assert.assertEquals("[1, 1, 2, 7, 12, 56]", t1.toString());
+        Assert.assertEquals("[1, 2, 7, 12, 56]", t1.toString());
     }
 
     @Test
     public void testSingleRotateLeft() {
         AvlTree t1 = new AvlTree(10);
         t1.insert(14, 56);
-        Assert.assertEquals(t1.mRoot.mValue, 14);
-        Assert.assertEquals(t1.mRoot.mLeft.mValue, 10);
-        Assert.assertEquals(t1.mRoot.mRight.mValue, 56);
+        Assert.assertEquals(t1.root.key, 14);
+        Assert.assertEquals(t1.root.left.key, 10);
+        Assert.assertEquals(t1.root.right.key, 56);
     }
 
     @Test
     public void testSingleRotateRight() {
         AvlTree t1 = new AvlTree(10);
         t1.insert(2, 1);
-        Assert.assertEquals(t1.mRoot.mValue, 2);
-        Assert.assertEquals(t1.mRoot.mLeft.mValue, 1);
-        Assert.assertEquals(t1.mRoot.mRight.mValue, 10);
+        Assert.assertEquals(t1.root.key, 2);
+        Assert.assertEquals(t1.root.left.key, 1);
+        Assert.assertEquals(t1.root.right.key, 10);
     }
     
     @Test
     public void testDoubleRotateLeftRight() {
         AvlTree t1 = new AvlTree(10);
         t1.insert(4, 9);
-        Assert.assertEquals(t1.mRoot.mValue, 9);
-        Assert.assertEquals(t1.mRoot.mLeft.mValue, 4);
-        Assert.assertEquals(t1.mRoot.mRight.mValue, 10);
+        Assert.assertEquals(t1.root.key, 9);
+        Assert.assertEquals(t1.root.left.key, 4);
+        Assert.assertEquals(t1.root.right.key, 10);
     }
 
     @Test
     public void testDoubleRotateRightLeft() {
         AvlTree t1 = new AvlTree(10);
         t1.insert(14, 12);
-        Assert.assertEquals(t1.mRoot.mValue, 12);
-        Assert.assertEquals(t1.mRoot.mLeft.mValue, 10);
-        Assert.assertEquals(t1.mRoot.mRight.mValue, 14);
+        Assert.assertEquals(t1.root.key, 12);
+        Assert.assertEquals(t1.root.left.key, 10);
+        Assert.assertEquals(t1.root.right.key, 14);
     }
 }

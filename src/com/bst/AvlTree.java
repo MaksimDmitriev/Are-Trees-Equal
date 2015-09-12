@@ -5,24 +5,24 @@ import java.util.Queue;
 
 public class AvlTree {
 
-    Node mRoot;
+    Node root;
 
     public AvlTree() {
 
     }
 
-    public AvlTree(int root) {
-        mRoot = new Node(root);
-    }
+	public AvlTree(int... keys) {
+		insert(keys);
+	}
 
     private Node insert(Node parent, int key) {
         if (parent == null) {
             return new Node(key);
         }
-        if (key < parent.mValue) {
-            parent.mLeft = insert(parent.mLeft, key);
-        } else if (key > parent.mValue) {
-            parent.mRight = insert(parent.mRight, key);
+        if (key < parent.key) {
+            parent.left = insert(parent.left, key);
+        } else if (key > parent.key) {
+            parent.right = insert(parent.right, key);
         }
         return balance(parent);
     }
@@ -30,14 +30,14 @@ public class AvlTree {
     private Node balance(Node p) {
         fixHeight(p);
         if (bfactor(p) == 2) {
-            if (bfactor(p.mRight) < 0) {
-                p.mRight = rotateRight(p.mRight);
+            if (bfactor(p.right) < 0) {
+                p.right = rotateRight(p.right);
             }
             return rotateLeft(p);
         }
         if (bfactor(p) == -2) {
-            if (bfactor(p.mLeft) > 0) {
-                p.mLeft = rotateLeft(p.mLeft);
+            if (bfactor(p.left) > 0) {
+                p.left = rotateLeft(p.left);
             }
             return rotateRight(p);
         }
@@ -45,40 +45,40 @@ public class AvlTree {
     }
     
     private Node rotateRight(Node p) {
-        Node q = p.mLeft;
-        p.mLeft = q.mRight;
-        q.mRight = p;
+        Node q = p.left;
+        p.left = q.right;
+        q.right = p;
         fixHeight(p);
         fixHeight(q);
         return q;
     }
     
     private Node rotateLeft(Node q) {
-        Node p = q.mRight;
-        q.mRight = p.mLeft;
-        p.mLeft = q;
+        Node p = q.right;
+        q.right = p.left;
+        p.left = q;
         fixHeight(q);
         fixHeight(p);
         return p;
     }
 
     private int height(Node p) {
-        return p == null ? 0 : p.mHeight;
+        return p == null ? 0 : p.height;
     }
     
     private int bfactor(Node p) {
-        return height(p.mRight) - height(p.mLeft);
+        return height(p.right) - height(p.left);
     }
 
     private void fixHeight(Node p) {
-        int hl = height(p.mLeft);
-        int hr = height(p.mRight);
-        p.mHeight = (hl > hr ? hl : hr) + 1;
+        int hl = height(p.left);
+        int hr = height(p.right);
+        p.height = (hl > hr ? hl : hr) + 1;
     }
 
     public void insert(int... keys) {
         for (int value : keys) {
-            mRoot = insert(mRoot, value);
+            root = insert(root, value);
         }
     }
 
@@ -91,7 +91,7 @@ public class AvlTree {
             return false;
         }
         AvlTree other = (AvlTree) arg0;
-        return areTreesEqual(this.mRoot, other.mRoot);
+        return areTreesEqual(this.root, other.root);
     }
 
     private boolean areTreesEqual(Node root1, Node root2) {
@@ -101,25 +101,25 @@ public class AvlTree {
         if (root1 == null || root2 == null) {
             return false;
         }
-        return root1.mValue == root2.mValue && areTreesEqual(root1.mLeft, root2.mLeft) && areTreesEqual(root1.mRight, root2.mRight);
+        return root1.key == root2.key && areTreesEqual(root1.left, root2.left) && areTreesEqual(root1.right, root2.right);
     }
 
     @Override
     public int hashCode() {
-        if (mRoot == null) {
+        if (root == null) {
             return 0;
         }
         Queue<Node> nodes = new LinkedList<AvlTree.Node>();
-        nodes.add(mRoot);
+        nodes.add(root);
         int res = 17;
         while (!nodes.isEmpty()) {
             Node head = nodes.remove();
             res = 31 * res + head.hashCode();
-            if (head.mLeft != null) {
-                nodes.add(head.mLeft);
+            if (head.left != null) {
+                nodes.add(head.left);
             }
-            if (head.mRight != null) {
-                nodes.add(head.mRight);
+            if (head.right != null) {
+                nodes.add(head.right);
             }
         }
         return res;
@@ -127,11 +127,11 @@ public class AvlTree {
 
     @Override
     public String toString() {
-        if (mRoot == null) {
+        if (root == null) {
             return "[]";
         }
         StringBuilder builder = new StringBuilder("[");
-        inOrderPrint(mRoot, builder);
+        inOrderPrint(root, builder);
         builder.setLength(builder.length() - 2);
         builder.append("]");
         return builder.toString();
@@ -139,34 +139,34 @@ public class AvlTree {
 
     private void inOrderPrint(Node root, StringBuilder builder) {
         if (root != null) {
-            inOrderPrint(root.mLeft, builder);
+            inOrderPrint(root.left, builder);
             builder.append(root + ", ");
-            inOrderPrint(root.mRight, builder);
+            inOrderPrint(root.right, builder);
         }
     }
 
     static class Node {
 
-        Node mLeft;
-        Node mRight;
-        final int mValue;
-        private int mHeight;
+        Node left;
+        Node right;
+        final int key;
+        private int height;
 
         private Node(int value) {
-            mValue = value;
-            mHeight = 1;
+            key = value;
+            height = 1;
         }
 
         @Override
         public int hashCode() {
             int res = 17;
-            res = 17 * res + mValue;
+            res = 17 * res + key;
             return res;
         }
 
         @Override
         public String toString() {
-            return Integer.toString(mValue);
+            return Integer.toString(key);
         }
     }
 
