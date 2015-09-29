@@ -1,5 +1,7 @@
 package com.bst;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -14,6 +16,14 @@ public class AvlTree {
 	public AvlTree(int... keys) {
 		insert(keys);
 	}
+	
+	public void insertWithStack(int... keys) {
+		if (keys != null) {
+			for (int key : keys) {
+				insertWithStack(root, key);
+			}
+		}
+	}
 
     private Node insert(Node parent, int key) {
         if (parent == null) {
@@ -25,6 +35,41 @@ public class AvlTree {
             parent.right = insert(parent.right, key);
         }
         return balance(parent);
+    }
+    
+    private void insertWithStack(Node parent, int key) {    	
+        if (parent == null) {
+            root = new Node(key);
+            return;
+        }
+        Deque<Node> stack = new ArrayDeque<Node>();
+        Node current = parent;
+        while (current != null) {
+        	parent = current;
+        	stack.push(current);
+        	if (key == current.key) {
+        		return;
+        	}
+        	current = key < current.key ? current.left : current.right;
+        }
+        if (key < parent.key) {
+        	parent.left = new Node(key);
+        } else {
+        	parent.right = new Node(key);
+        }
+        
+        while (!stack.isEmpty()) {
+        	Node lastStackElement = stack.pop();
+        	Node newLocalRoot = balance(lastStackElement);
+        	if (!newLocalRoot.equals(lastStackElement) && !stack.isEmpty()) {
+        		lastStackElement = stack.pop();
+        		if (newLocalRoot.key < lastStackElement.key) {
+        			lastStackElement.left = newLocalRoot;
+        		} else {
+        			lastStackElement.right = newLocalRoot;
+        		}
+        	}
+        }
     }
 
     private Node balance(Node p) {
@@ -152,9 +197,9 @@ public class AvlTree {
         final int key;
         private int height;
 
-        private Node(int value) {
-            key = value;
-            height = 1;
+        private Node(int key) {
+            this.key = key;
+            this.height = 1;
         }
 
         @Override
@@ -162,6 +207,18 @@ public class AvlTree {
             int res = 17;
             res = 17 * res + key;
             return res;
+        }
+        
+        @Override
+        public boolean equals(Object obj) {
+        	if (obj == this) {
+        		return true;
+        	}
+        	if (!(obj instanceof Node)) {
+        		return false;
+        	}
+        	Node other = (Node) obj;
+        	return key == other.key;
         }
 
         @Override
