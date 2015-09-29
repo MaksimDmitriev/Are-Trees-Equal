@@ -17,10 +17,10 @@ public class AvlTree {
 		insert(keys);
 	}
 	
-	public void insertWithStack(int... keys) {
+	public void insertRecursively(int... keys) {
 		if (keys != null) {
 			for (int key : keys) {
-				insertWithStack(root, key);
+				insertRecursively(root, key);
 			}
 		}
 	}
@@ -37,7 +37,7 @@ public class AvlTree {
         return balance(parent);
     }
     
-    private void insertWithStack(Node parent, int key) {    	
+    private void insertRecursively(Node parent, int key) {    	
         if (parent == null) {
             root = new Node(key);
             return;
@@ -57,7 +57,10 @@ public class AvlTree {
         } else {
         	parent.right = new Node(key);
         }
-        
+        balance(stack);
+    }
+    
+    private void balance(Deque<Node> stack) {
         while (!stack.isEmpty()) {
         	Node lastStackElement = stack.pop();
         	Node newLocalRoot = balance(lastStackElement);
