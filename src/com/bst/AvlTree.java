@@ -17,10 +17,10 @@ public class AvlTree {
 		insert(keys);
 	}
 	
-	public void insertRecursively(int... keys) {
+	public void insertIteratively(int... keys) {
 		if (keys != null) {
 			for (int key : keys) {
-				insertRecursively(root, key);
+				insertIteratively(root, key);
 			}
 		}
 	}
@@ -37,7 +37,7 @@ public class AvlTree {
         return balance(parent);
     }
     
-    private void insertRecursively(Node parent, int key) {    	
+    private void insertIteratively(Node parent, int key) {    	
         if (parent == null) {
             root = new Node(key);
             return;
@@ -52,27 +52,27 @@ public class AvlTree {
         	}
         	current = key < current.key ? current.left : current.right;
         }
+        Node inserted = new Node(key);
         if (key < parent.key) {
-        	parent.left = new Node(key);
+        	parent.left = inserted;
         } else {
-        	parent.right = new Node(key);
+        	parent.right = inserted;
         }
-        balance(stack);
+        balance(inserted, stack);
     }
     
-    private void balance(Deque<Node> stack) {
+    private void balance(Node inserted, Deque<Node> stack) {
+    	Node newLocalRoot = inserted;
         while (!stack.isEmpty()) {
-        	Node lastStackElement = stack.pop();
-        	Node newLocalRoot = balance(lastStackElement);
-        	if (!newLocalRoot.equals(lastStackElement) && !stack.isEmpty()) {
-        		lastStackElement = stack.pop();
-        		if (newLocalRoot.key < lastStackElement.key) {
-        			lastStackElement.left = newLocalRoot;
-        		} else {
-        			lastStackElement.right = newLocalRoot;
-        		}
-        	}
+    		Node current = stack.pop();
+    		if (newLocalRoot.key < current.key) {
+    			current.left = newLocalRoot;
+    		} else {
+    			current.right = newLocalRoot;
+    		}
+    		newLocalRoot = balance(current); 
         }
+        root = newLocalRoot;
     }
 
     private Node balance(Node p) {
