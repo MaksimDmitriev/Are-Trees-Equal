@@ -14,7 +14,9 @@ public class AvlTree {
     }
 
 	public AvlTree(int... keys) {
-		insert(keys);
+		if (keys != null) {
+			insert(keys);
+		}
 	}
 	
 	public void insertIteratively(int... keys) {
@@ -125,9 +127,17 @@ public class AvlTree {
     }
 
     public void insert(int... keys) {
-        for (int value : keys) {
-            root = insert(root, value);
+        for (int key : keys) {
+            root = insert(root, key);
         }
+    }
+    
+    public void insert(int key) {
+    	root = insert(root, key);
+    }
+
+    public void insertIteratively(int key) {
+    	insertIteratively(root, key);
     }
 
     @Override
