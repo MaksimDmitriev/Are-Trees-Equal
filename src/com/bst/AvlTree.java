@@ -5,57 +5,58 @@ import java.util.Deque;
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class AvlTree {
+public class AvlTree<T extends Comparable<T>> {
 
-    Node root;
+    Node<T> root;
 
     public AvlTree() {
 
     }
 
-	public AvlTree(int... keys) {
+	public AvlTree(T... keys) {
 		if (keys != null) {
 			insert(keys);
 		}
 	}
 	
-	public void insertIteratively(int... keys) {
+	public void insertIteratively(T... keys) {
 		if (keys != null) {
-			for (int key : keys) {
+			for (T key : keys) {
 				insertIteratively(root, key);
 			}
 		}
 	}
 
-    private Node insert(Node parent, int key) {
+    private Node<T> insert(Node<T> parent, T key) {
         if (parent == null) {
-            return new Node(key);
+            return new Node<T>(key);
         }
-        if (key < parent.key) {
+        if (key.compareTo(parent.key) < 0) {
             parent.left = insert(parent.left, key);
-        } else if (key > parent.key) {
+        } else if (key.compareTo(parent.key) > 0) {
             parent.right = insert(parent.right, key);
         }
         return balance(parent);
     }
     
-    private void insertIteratively(Node parent, int key) {    	
+    private void insertIteratively(Node<T> parent, T key) {    	
         if (parent == null) {
-            root = new Node(key);
+            root = new Node<T>(key);
             return;
         }
-        Deque<Node> stack = new ArrayDeque<Node>();
-        Node current = parent;
+        // current.key
+        Deque<Node<T>> stack = new ArrayDeque<Node<T>>();
+        Node<T> current = parent;
         while (current != null) {
         	parent = current;
         	stack.push(current);
-        	if (key == current.key) {
+        	if (key.compareTo(current.key) == 0) {
         		return;
         	}
-        	current = key < current.key ? current.left : current.right;
+        	current = key.compareTo(current.key) < 0 ? current.left : current.right;
         }
-        Node inserted = new Node(key);
-        if (key < parent.key) {
+        Node<T> inserted = new Node<T>(key);
+        if (key.compareTo(parent.key) < 0) {
         	parent.left = inserted;
         } else {
         	parent.right = inserted;
@@ -63,11 +64,11 @@ public class AvlTree {
         balance(inserted, stack);
     }
     
-    private void balance(Node inserted, Deque<Node> stack) {
-    	Node newLocalRoot = inserted;
+    private void balance(Node<T> inserted, Deque<Node<T>> stack) {
+    	Node<T> newLocalRoot = inserted;
         while (!stack.isEmpty()) {
-    		Node current = stack.pop();
-    		if (newLocalRoot.key < current.key) {
+    		Node<T> current = stack.pop();
+    		if (newLocalRoot.compareTo(current.key) < 0) {
     			current.left = newLocalRoot;
     		} else {
     			current.right = newLocalRoot;
@@ -77,7 +78,7 @@ public class AvlTree {
         root = newLocalRoot;
     }
 
-    private Node balance(Node p) {
+    private Node<T> balance(Node<T> p) {
         fixHeight(p);
         if (bfactor(p) == 2) {
             if (bfactor(p.right) < 0) {
@@ -94,8 +95,8 @@ public class AvlTree {
         return p;
     }
     
-    private Node rotateRight(Node p) {
-        Node q = p.left;
+    private Node<T> rotateRight(Node<T> p) {
+        Node<T> q = p.left;
         p.left = q.right;
         q.right = p;
         fixHeight(p);
@@ -103,8 +104,8 @@ public class AvlTree {
         return q;
     }
     
-    private Node rotateLeft(Node q) {
-        Node p = q.right;
+    private Node<T> rotateLeft(Node<T> q) {
+        Node<T> p = q.right;
         q.right = p.left;
         p.left = q;
         fixHeight(q);
@@ -112,31 +113,31 @@ public class AvlTree {
         return p;
     }
 
-    private int height(Node p) {
+    private int height(Node<T> p) {
         return p == null ? 0 : p.height;
     }
     
-    private int bfactor(Node p) {
+    private int bfactor(Node<T> p) {
         return height(p.right) - height(p.left);
     }
 
-    private void fixHeight(Node p) {
+    private void fixHeight(Node<T> p) {
         int hl = height(p.left);
         int hr = height(p.right);
         p.height = (hl > hr ? hl : hr) + 1;
     }
 
-    public void insert(int... keys) {
-        for (int key : keys) {
+    public void insert(T... keys) {
+        for (T key : keys) {
             root = insert(root, key);
         }
     }
     
-    public void insert(int key) {
+    public void insert(T key) {
     	root = insert(root, key);
     }
 
-    public void insertIteratively(int key) {
+    public void insertIteratively(T key) {
     	insertIteratively(root, key);
     }
 
@@ -152,7 +153,7 @@ public class AvlTree {
         return areTreesEqual(this.root, other.root);
     }
 
-    private boolean areTreesEqual(Node root1, Node root2) {
+    private boolean areTreesEqual(Node<T> root1, Node<T> root2) {
         if (root1 == root2) {
             return true;
         }
@@ -167,11 +168,11 @@ public class AvlTree {
         if (root == null) {
             return 0;
         }
-        Queue<Node> nodes = new LinkedList<AvlTree.Node>();
+        Queue<Node<T>> nodes = new LinkedList<Node<T>>();
         nodes.add(root);
         int res = 17;
         while (!nodes.isEmpty()) {
-            Node head = nodes.remove();
+            Node<T> head = nodes.remove();
             res = 31 * res + head.hashCode();
             if (head.left != null) {
                 nodes.add(head.left);
@@ -195,7 +196,7 @@ public class AvlTree {
         return builder.toString();
     }
 
-    private void inOrderPrint(Node root, StringBuilder builder) {
+    private void inOrderPrint(Node<T> root, StringBuilder builder) {
         if (root != null) {
             inOrderPrint(root.left, builder);
             builder.append(root + ", ");
@@ -203,23 +204,21 @@ public class AvlTree {
         }
     }
 
-    static class Node {
+    static class Node<T> implements Comparable<T> {
 
-        Node left;
-        Node right;
-        final int key;
+        Node<T> left;
+        Node<T> right;
+        final T key;
         private int height;
 
-        private Node(int key) {
+        private Node(T key) {
             this.key = key;
             this.height = 1;
         }
 
         @Override
         public int hashCode() {
-            int res = 17;
-            res = 17 * res + key;
-            return res;
+        	return key == null ? 0 : key.hashCode();
         }
         
         @Override
@@ -231,12 +230,20 @@ public class AvlTree {
         		return false;
         	}
         	Node other = (Node) obj;
-        	return key == other.key;
+			// Handles nulls, a null this.key, and then check if this and other are
+        	// logically equal
+        	return key == other.key || (key == null ? false : key.equals(other.key)); 
         }
 
         @Override
         public String toString() {
-            return Integer.toString(key);
+            return key == null ? "" : key.toString();
+        }
+        
+        @Override
+        public int compareTo(T o) {
+        	// TODO
+        	return 0;
         }
     }
 
