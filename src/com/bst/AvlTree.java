@@ -10,7 +10,6 @@ public class AvlTree<T extends Comparable<T>> {
     Node<T> root;
 
     public AvlTree() {
-
     }
 
 	public AvlTree(T... keys) {
@@ -204,7 +203,7 @@ public class AvlTree<T extends Comparable<T>> {
         }
     }
 
-    static class Node<T> implements Comparable<T> {
+    static class Node<T> implements Comparable<Node<T>> {
 
         Node<T> left;
         Node<T> right;
@@ -241,8 +240,11 @@ public class AvlTree<T extends Comparable<T>> {
         }
         
         @Override
-        public int compareTo(T o) {
-        	// TODO
+        public int compareTo(Node<T> o) {
+        	if (this == o) {
+        		return 0;
+        	}
+        	// TODO Auto-generated method stub
         	return 0;
         }
     }

@@ -5,23 +5,9 @@ import com.bst.AvlTree;
 public class Main {
 
 	public static void main(String[] args) {
-//		Object object = new MyClass<Integer>(new Integer(12));
-//		System.out.println(object instanceof MyClass);
-		
-		MyClass<Integer> m1 = new MyClass<Integer>(12);
-		MyClass<Integer> m2 = new MyClass<Integer>(12);
-//		System.out.println("Int and Int: " + m1.equals(m2));
-		
-		MyClass<Double> m3 = new MyClass<Double>(12.5);
-//		System.out.println("Int and Dounle: " + m1.equals(m3));
-		
-		
-		MyClass<A> m4 = new MyClass<A>(new A(12));
-		MyClass<B> m5 = new MyClass<B>(new B(34));
-		System.out.println(m4.equals(m5));
-		
-//		System.out.println(m1.key.getClass());
-//		System.out.println(m2.key.getClass());
+		A m1 = new A(12);
+		A m2 = new A(null);
+		System.out.println("Int and Int: " + m1.compareTo(m2));
 		
 		
 		/*
@@ -66,7 +52,7 @@ public class Main {
 		*/
 	}
 	
-	static class A {
+	static class A implements Comparable<A> {
 		int x;
 		
 		public A(int x) {
@@ -84,6 +70,15 @@ public class Main {
 			A other = (A) obj;
 			return x == other.x;
 		}
+		
+		@Override
+		public int compareTo(A o) {
+			if (this == o) {
+				return 0;
+			}
+			return x - o.x;
+		}
+		
 	}
 	
 	static class B {
@@ -106,7 +101,7 @@ public class Main {
 		}
 	}
 	
-	static class MyClass<T> {
+	static class MyClass<T> implements Comparable<MyClass<T>> {
 		
 		T key;
 		
@@ -125,6 +120,14 @@ public class Main {
 			MyClass other = (MyClass) obj;
 			// Handles nulls, a null key, and then contents 
 			return key == other.key || (key == null ? false : key.equals(other.key));
+		}
+
+		@Override
+		public int compareTo(MyClass<T> o) {
+			if (this == o) {
+				return 0;
+			}
+			return key.
 		}
 	}
 }
