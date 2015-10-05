@@ -4,12 +4,30 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class AvlTreeTest {
+	
+	@Test
+    public void testTwoEmptyTrees() {
+		AvlTree<Integer> t1 = new AvlTree<Integer>();
+		AvlTree<Integer> t2 = new AvlTree<Integer>();
+		Assert.assertEquals(t1, t2);
+	}
+	
+	@Test
+    public void testLeftEmptyTree() {
+		AvlTree<Integer> t1 = new AvlTree<Integer>();
+		AvlTree<Integer> t2 = new AvlTree<Integer>(12);
+		Assert.assertNotEquals(t1, t2);
+	}
+	
+	@Test
+    public void testRightEmptyTree() {
+		AvlTree<Integer> t1 = new AvlTree<Integer>(12);
+		AvlTree<Integer> t2 = new AvlTree<Integer>();
+		Assert.assertNotEquals(t1, t2);
+	}
+	
+	
 /*
-    @Test
-    public void testDefaultConstructor() {
-        AvlTree<Integer> t1 = new AvlTree<Integer>();
-        Assert.assertNull(t1.root);
-    }
 
     @Test
     public void testIntegerConstructor() {

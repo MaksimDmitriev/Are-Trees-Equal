@@ -1,7 +1,5 @@
 package com.bst;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -13,17 +11,7 @@ public class AvlTree<T extends Comparable<T>> {
     }
 
 	public AvlTree(T... keys) {
-		if (keys != null) {
-			insert(keys);
-		}
-	}
-	
-	public void insertIteratively(T... keys) {
-		if (keys != null) {
-			for (T key : keys) {
-				insertIteratively(root, key);
-			}
-		}
+		insert(keys);
 	}
 
     private Node<T> insert(Node<T> parent, T key) {
@@ -36,45 +24,6 @@ public class AvlTree<T extends Comparable<T>> {
             parent.right = insert(parent.right, key);
         }
         return balance(parent);
-    }
-    
-    private void insertIteratively(Node<T> parent, T key) {    	
-        if (parent == null) {
-            root = new Node<T>(key);
-            return;
-        }
-        // current.key
-        Deque<Node<T>> stack = new ArrayDeque<Node<T>>();
-        Node<T> current = parent;
-        while (current != null) {
-        	parent = current;
-        	stack.push(current);
-        	if (key.compareTo(current.key) == 0) {
-        		return;
-        	}
-        	current = key.compareTo(current.key) < 0 ? current.left : current.right;
-        }
-        Node<T> inserted = new Node<T>(key);
-        if (key.compareTo(parent.key) < 0) {
-        	parent.left = inserted;
-        } else {
-        	parent.right = inserted;
-        }
-        balance(inserted, stack);
-    }
-    
-    private void balance(Node<T> inserted, Deque<Node<T>> stack) {
-    	Node<T> newLocalRoot = inserted;
-        while (!stack.isEmpty()) {
-    		Node<T> current = stack.pop();
-    		if (newLocalRoot.compareTo(current.key) < 0) {
-    			current.left = newLocalRoot;
-    		} else {
-    			current.right = newLocalRoot;
-    		}
-    		newLocalRoot = balance(current); 
-        }
-        root = newLocalRoot;
     }
 
     private Node<T> balance(Node<T> p) {
@@ -127,17 +76,15 @@ public class AvlTree<T extends Comparable<T>> {
     }
 
     public void insert(T... keys) {
+		if (keys == null) {
+			return;
+		}
         for (T key : keys) {
+        	if (key == null) {
+        		continue;
+        	}
             root = insert(root, key);
         }
-    }
-    
-    public void insert(T key) {
-    	root = insert(root, key);
-    }
-
-    public void insertIteratively(T key) {
-    	insertIteratively(root, key);
     }
 
     @Override
@@ -148,10 +95,17 @@ public class AvlTree<T extends Comparable<T>> {
         if (!(arg0 instanceof AvlTree)) {
             return false;
         }
-        AvlTree other = (AvlTree) arg0;
+        AvlTree other = (AvlTree) arg0; 
         return areTreesEqual(this.root, other.root);
     }
 
+    /**
+     * 
+     * @param root1 the root of the first tree
+     * @param root2 the root of the second tree
+     * @return true if the trees with the given roots are structurally identical, 
+     * false otherwise
+     */
     private boolean areTreesEqual(Node<T> root1, Node<T> root2) {
         if (root1 == root2) {
             return true;
@@ -159,7 +113,7 @@ public class AvlTree<T extends Comparable<T>> {
         if (root1 == null || root2 == null) {
             return false;
         }
-        return root1.key == root2.key && areTreesEqual(root1.left, root2.left) && areTreesEqual(root1.right, root2.right);
+        return root1.equals(root2) && areTreesEqual(root1.left, root2.left) && areTreesEqual(root1.right, root2.right);
     }
 
     @Override
@@ -203,7 +157,7 @@ public class AvlTree<T extends Comparable<T>> {
         }
     }
 
-    static class Node<T> implements Comparable<Node<T>> {
+    static class Node<T> {
 
         Node<T> left;
         Node<T> right;
@@ -229,23 +183,12 @@ public class AvlTree<T extends Comparable<T>> {
         		return false;
         	}
         	Node other = (Node) obj;
-			// Handles nulls, a null this.key, and then check if this and other are
-        	// logically equal
-        	return key == other.key || (key == null ? false : key.equals(other.key)); 
+        	return key.equals(other.key); 
         }
 
         @Override
         public String toString() {
-            return key == null ? "" : key.toString();
-        }
-        
-        @Override
-        public int compareTo(Node<T> o) {
-        	if (this == o) {
-        		return 0;
-        	}
-        	// TODO Auto-generated method stub
-        	return 0;
+            return key.toString();
         }
     }
 
