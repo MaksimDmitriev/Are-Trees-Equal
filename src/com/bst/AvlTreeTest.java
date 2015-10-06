@@ -2,6 +2,9 @@ package com.bst;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.omg.PortableInterceptor.INACTIVE;
+
+import com.bst.AvlTree.Node;
 
 public class AvlTreeTest {
 
@@ -163,29 +166,56 @@ public class AvlTreeTest {
 
     @Test
     public void testSingleRotateRight() {
-        AvlTree t1 = new AvlTree(10);
+        AvlTree<Integer> t1 = new AvlTree<Integer>(10);
         t1.insert(2, 1);
-        Assert.assertEquals(t1.root.key, 2);
-        Assert.assertEquals(t1.root.left.key, 1);
-        Assert.assertEquals(t1.root.right.key, 10);
+        Assert.assertEquals(t1.root.key, Integer.valueOf(2));
+        Assert.assertEquals(t1.root.left.key, Integer.valueOf(1));
+        Assert.assertEquals(t1.root.right.key, Integer.valueOf(10));
     }
-    /*
+    
     @Test
     public void testDoubleRotateLeftRight() {
-        AvlTree t1 = new AvlTree(10);
+        AvlTree<Integer> t1 = new AvlTree<Integer>(10);
         t1.insert(4, 9);
-        Assert.assertEquals(t1.root.key, 9);
-        Assert.assertEquals(t1.root.left.key, 4);
-        Assert.assertEquals(t1.root.right.key, 10);
+        Assert.assertEquals(t1.root.key, Integer.valueOf(9));
+        Assert.assertEquals(t1.root.left.key, Integer.valueOf(4));
+        Assert.assertEquals(t1.root.right.key, Integer.valueOf(10));
     }
 
     @Test
     public void testDoubleRotateRightLeft() {
-        AvlTree t1 = new AvlTree(10);
+        AvlTree<Integer> t1 = new AvlTree<Integer>(10);
         t1.insert(14, 12);
-        Assert.assertEquals(t1.root.key, 12);
-        Assert.assertEquals(t1.root.left.key, 10);
-        Assert.assertEquals(t1.root.right.key, 14);
+        Assert.assertEquals(t1.root.key, Integer.valueOf(12));
+        Assert.assertEquals(t1.root.left.key, Integer.valueOf(10));
+        Assert.assertEquals(t1.root.right.key, Integer.valueOf(14));
     }
-    */
+    
+    @Test
+    public void testInsertDuplicate() {
+    	AvlTree<Integer> avlTree = new AvlTree<Integer>(12, 12);
+    	Assert.assertEquals(1, avlTree.getSize());
+    }
+    
+    @Test
+    public void testInitWithNull() {
+    	AvlTree<Integer> avlTree = new AvlTree<Integer>(null);
+    	Assert.assertNull(null, avlTree.root);
+    }
+    
+    @Test(expected = NullPointerException.class)
+    public void testInsertNull() {
+    	Integer[] nodes = {
+    			12, null
+    	};
+    	AvlTree<Integer> avlTree = new AvlTree<Integer>(nodes);
+    }
+    
+    @Test
+    public void testNodeEqual() {
+    	Node<Integer> node = new Node<Integer>(1);
+    	Node<Integer> node2 = node;
+    	Assert.assertEquals(node, node2);
+    }
+    
 }

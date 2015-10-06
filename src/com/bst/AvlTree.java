@@ -170,7 +170,7 @@ public class AvlTree<T extends Comparable<T>> {
         final T key;
         private int height;
 
-        private Node(T key) {
+        Node(T key) {
             this.key = key;
             this.height = 1;
         }
