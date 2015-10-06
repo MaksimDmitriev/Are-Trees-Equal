@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class AvlTreeTest {
-	
+
 	@Test
     public void testTwoEmptyTrees() {
 		AvlTree<Integer> t1 = new AvlTree<Integer>();
@@ -26,141 +26,139 @@ public class AvlTreeTest {
 		Assert.assertNotEquals(t1, t2);
 	}
 	
-	
-/*
-
-    @Test
-    public void testIntegerConstructor() {
-        AvlTree<Integer> t1 = new AvlTree<Integer>(1);
-        Assert.assertNotNull(t1.root);
-    }
-
-    @Test
-    public void testInsertToEmptyTree() {
-        AvlTree<Integer> t1 = new AvlTree<Integer>();
-        t1.insert(1);
-        // uals(1, t1.root.key);
-        Assert.assertEquals(1, t1.root.key);
-    }
-
     @Test
     public void testEqualsItself() {
-        AvlTree t1 = new AvlTree();
+        AvlTree<Integer> t1 = new AvlTree<Integer>();
         Assert.assertEquals(t1, t1);
     }
-
+    
     @Test
     public void testNotEqualNotAvlInstance() {
-        AvlTree t1 = new AvlTree();
+        AvlTree<Integer> t1 = new AvlTree<Integer>();
         Object object = new Object();
         Assert.assertNotEquals(t1, object);
     }
-
+    
     @Test
-    public void testEmptyEqual() {
-        AvlTree t1 = new AvlTree();
-        AvlTree t2 = new AvlTree();
-        Assert.assertEquals(t1, t2);
-    }
-
-    @Test
-    public void testFirstEmpty() {
-        AvlTree t1 = new AvlTree();
-        AvlTree t2 = new AvlTree(1);
+    public void testNotequalSizes() {
+    	final int min = 0;
+    	final int max = 100000;
+        AvlTree<Integer> t1 = new AvlTree<Integer>();
+        insertRange(t1, min, max);
+        AvlTree<Integer> t2 = new AvlTree<Integer>();
+        insertRange(t2, min, max + 1);
         Assert.assertNotEquals(t1, t2);
     }
-
+    
     @Test
-    public void testSecondEmpty() {
-        AvlTree t1 = new AvlTree(1);
-        AvlTree t2 = new AvlTree();
+    public void testStructurallyNotIdentical() {
+    	final int min = 0;
+    	final int max = 100000;
+        AvlTree<Integer> t1 = new AvlTree<Integer>();
+        insertRange(t1, min, max);
+        AvlTree<Integer> t2 = new AvlTree<Integer>();
+        insertRange(t2, min + 1, max + 1);
         Assert.assertNotEquals(t1, t2);
     }
-
+    
     @Test
-    public void testRootsEqual() {
-        AvlTree t1 = new AvlTree(1);
-        AvlTree t2 = new AvlTree(1);
+    public void testStructurallIdentical() {
+    	final int min = 0;
+    	final int max = 100000;
+        AvlTree<Integer> t1 = new AvlTree<Integer>();
+        insertRange(t1, min, max);
+        AvlTree<Integer> t2 = new AvlTree<Integer>();
+        insertRange(t2, min, max);
         Assert.assertEquals(t1, t2);
     }
-
+    
     @Test
-    public void testRootAndLeftEqual() {
-        AvlTree t1 = new AvlTree(10);
-        t1.insert(2);
-        AvlTree t2 = new AvlTree(10);
-        t2.insert(2);
-        Assert.assertEquals(t1, t2);
+    public void testLeftNodeMissing() {
+    	AvlTree<Integer> t1 = new AvlTree<Integer>(10, 4, 18, 2, 20);
+    	AvlTree<Integer> t2 = new AvlTree<Integer>(10, 4, 18, 6, 20);
+    	Assert.assertNotEquals(t1, t2);
     }
-
+    
     @Test
-    public void testRootAndRightEqual() {
-        AvlTree t1 = new AvlTree(1);
-        t1.insert(2);
-        AvlTree t2 = new AvlTree(1);
-        t2.insert(2);
-        Assert.assertEquals(t1, t2);
+    public void testRightNodeMissing() {
+    	AvlTree<Integer> t1 = new AvlTree<Integer>(10, 4);
+    	AvlTree<Integer> t2 = new AvlTree<Integer>(10, 4, 18);
+    	Assert.assertNotEquals(t1, t2);
     }
-
+    
     @Test
-    public void testRootsEqual_LeftsNotEqual() {
-        AvlTree t1 = new AvlTree(10);
-        t1.insert(2);
-        AvlTree t2 = new AvlTree(10);
-        t2.insert(1);
-        Assert.assertNotEquals(t1, t2);
+    public void testLeftNodesNotEqual() {
+    	AvlTree<Integer> t1 = new AvlTree<Integer>(10, 3, 18);
+    	AvlTree<Integer> t2 = new AvlTree<Integer>(10, 4, 18);
+    	Assert.assertNotEquals(t1, t2);
     }
-
+    
     @Test
-    public void testRootsEqual_RightsNotEqual() {
-        AvlTree t1 = new AvlTree(1);
-        t1.insert(2);
-        AvlTree t2 = new AvlTree(1);
-        t2.insert(4);
-        Assert.assertNotEquals(t1, t2);
+    public void testRightNodesNotEqual() {
+    	AvlTree<Integer> t1 = new AvlTree<Integer>(10, 4, 16);
+    	AvlTree<Integer> t2 = new AvlTree<Integer>(10, 4, 18);
+    	Assert.assertNotEquals(t1, t2);
     }
-
+    
+    @Test
+    public void testRootNodesNotEqual() {
+    	AvlTree<Integer> t1 = new AvlTree<Integer>(12, 3, 45);
+    	AvlTree<Integer> t2 = new AvlTree<Integer>(13, 3, 45);
+    	Assert.assertNotEquals(t1, t2);
+    }
+    
     @Test
     public void testEmptyTreeHashCode() {
-        AvlTree t1 = new AvlTree();
-        Assert.assertEquals(0, t1.hashCode());
+    	AvlTree<Integer> avlTree = new AvlTree<Integer>();
+    	Assert.assertEquals(0, avlTree.hashCode());
     }
-
+    
+    @Test
+    public void testSingleZeroNodeTreeHashCode() {
+    	AvlTree<Integer> avlTree = new AvlTree<Integer>(0);
+    	Assert.assertNotEquals(0, avlTree.hashCode());
+    }
+    
+    @Test
+    public void testRootAndLeftNodesTreeHashCode() {
+    	Integer[] nodes = new Integer[] {12, 3};
+    	AvlTree<Integer> avlTree = new AvlTree<Integer>(nodes);
+    	int res = 17;
+    	res = 31 * res + nodes[0].hashCode();
+    	res = 31 * res + nodes[1].hashCode();
+    	Assert.assertEquals(res, avlTree.hashCode());
+    }
+    
+    @Test
+    public void testRootAndRightNodesTreeHashCode() {
+    	Integer[] nodes = new Integer[] {12, 30};
+    	AvlTree<Integer> avlTree = new AvlTree<Integer>(nodes);
+    	int res = 17;
+    	res = 31 * res + nodes[0].hashCode();
+    	res = 31 * res + nodes[1].hashCode();
+    	Assert.assertEquals(res, avlTree.hashCode());
+    }
+    
+    private void insertRange(AvlTree<Integer> tree, int min, int max) {
+    	for (int i = min; i < max; i++) {
+    		tree.insert(i);
+    	}
+    }
+    
     @Test
     public void testEqualTreesEqualHashCodes() {
-        AvlTree t1 = new AvlTree(10);
-        t1.insert(2, 12);
-        AvlTree t2 = new AvlTree(10);
-        t2.insert(2, 12);
-        Assert.assertEquals(t1.hashCode(), t2.hashCode());
-    }
-    
-    @Test
-    public void testToStringEmpty() {
-        AvlTree t1 = new AvlTree();
-        Assert.assertEquals("[]", t1.toString());
-    }
-    
-    @Test
-    public void testToStringSingleNode() {
-        AvlTree t1 = new AvlTree(1);
-        Assert.assertEquals("[1]", t1.toString());
-    }
-
-    @Test
-    public void testToStringManyNodes() {
-        AvlTree t1 = new AvlTree(1);
-        t1.insert(12, 56, 7, 2, 1);
-        Assert.assertEquals("[1, 2, 7, 12, 56]", t1.toString());
+    	AvlTree<Integer> avlTree1 = new AvlTree<Integer>(1, 2, 3);
+    	AvlTree<Integer> avlTree2 = new AvlTree<Integer>(1, 2, 3);
+        Assert.assertEquals(avlTree1.hashCode(), avlTree2.hashCode());
     }
 
     @Test
     public void testSingleRotateLeft() {
-        AvlTree t1 = new AvlTree(10);
+        AvlTree<Integer> t1 = new AvlTree<Integer>(10);
         t1.insert(14, 56);
-        Assert.assertEquals(t1.root.key, 14);
-        Assert.assertEquals(t1.root.left.key, 10);
-        Assert.assertEquals(t1.root.right.key, 56);
+        Assert.assertEquals(t1.root.key, Integer.valueOf(14));
+        Assert.assertEquals(t1.root.left.key, Integer.valueOf(10));
+        Assert.assertEquals(t1.root.right.key, Integer.valueOf(56));
     }
 
     @Test
@@ -171,7 +169,7 @@ public class AvlTreeTest {
         Assert.assertEquals(t1.root.left.key, 1);
         Assert.assertEquals(t1.root.right.key, 10);
     }
-    
+    /*
     @Test
     public void testDoubleRotateLeftRight() {
         AvlTree t1 = new AvlTree(10);

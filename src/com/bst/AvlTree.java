@@ -6,6 +6,7 @@ import java.util.Queue;
 public class AvlTree<T extends Comparable<T>> {
 
     Node<T> root;
+    private int size;
 
     public AvlTree() {
     }
@@ -16,6 +17,7 @@ public class AvlTree<T extends Comparable<T>> {
 
     private Node<T> insert(Node<T> parent, T key) {
         if (parent == null) {
+        	size++;
             return new Node<T>(key);
         }
         if (key.compareTo(parent.key) < 0) {
@@ -25,6 +27,10 @@ public class AvlTree<T extends Comparable<T>> {
         }
         return balance(parent);
     }
+    
+    public int getSize() {
+		return size;
+	}
 
     private Node<T> balance(Node<T> p) {
         fixHeight(p);
@@ -81,7 +87,7 @@ public class AvlTree<T extends Comparable<T>> {
 		}
         for (T key : keys) {
         	if (key == null) {
-        		continue;
+        		throw new NullPointerException("Can't insert null");
         	}
             root = insert(root, key);
         }
@@ -96,7 +102,7 @@ public class AvlTree<T extends Comparable<T>> {
             return false;
         }
         AvlTree other = (AvlTree) arg0; 
-        return areTreesEqual(this.root, other.root);
+        return size == other.size && areTreesEqual(this.root, other.root);
     }
 
     /**
@@ -157,7 +163,7 @@ public class AvlTree<T extends Comparable<T>> {
         }
     }
 
-    static class Node<T> {
+    static final class Node<T> {
 
         Node<T> left;
         Node<T> right;
@@ -171,7 +177,7 @@ public class AvlTree<T extends Comparable<T>> {
 
         @Override
         public int hashCode() {
-        	return key == null ? 0 : key.hashCode();
+        	return key.hashCode();
         }
         
         @Override
