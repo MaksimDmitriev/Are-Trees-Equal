@@ -2,7 +2,6 @@ package com.bst;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.omg.PortableInterceptor.INACTIVE;
 
 import com.bst.AvlTree.Node;
 
