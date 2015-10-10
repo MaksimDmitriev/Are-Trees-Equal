@@ -1,5 +1,7 @@
 package com.bst;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -92,6 +94,58 @@ public class AvlTree<T extends Comparable<T>> {
             root = insert(root, key);
         }
     }
+    
+    public void insertIteratively(T... keys) {
+    	if (keys == null) {
+    		return;
+    	}
+    	for (T key : keys) {
+    		insertIteratively(root, key);
+    	}
+    }
+    
+    private void insertIteratively(Node<T> parent, T key) {      
+        if (parent == null) {
+            root = new Node<T>(key);
+            return;
+        }
+        Deque<Node<T>> stack = new ArrayDeque<Node<T>>();
+        Node<T> current = parent;
+        while (current != null) {
+            parent = current;
+            stack.push(current);
+            if (key.equals(current.key)) {
+                return;
+            }
+            if (key.compareTo(current.key) < 0) {
+            	current = current.left;
+            } else {
+            	current = current.right;
+            }
+        }
+        Node<T> inserted = new Node<T>(key);
+        if (key.compareTo(parent.key) < 0) {
+            parent.left = inserted;
+        } else {
+            parent.right = inserted;
+        }
+        balance(inserted, stack);
+    }
+
+    private void balance(Node<T> inserted, Deque<Node<T>> stack) {
+        Node<T> newLocalRoot = inserted;
+        while (!stack.isEmpty()) {
+            Node<T> current = stack.pop();
+            if (newLocalRoot.key.compareTo(current.key) < 0) {
+                current.left = newLocalRoot;
+            } else {
+                current.right = newLocalRoot;
+            }
+            newLocalRoot = balance(current); 
+        }
+        root = newLocalRoot;
+    }
+
 
     @Override
     public boolean equals(Object arg0) {
@@ -102,7 +156,8 @@ public class AvlTree<T extends Comparable<T>> {
             return false;
         }
         AvlTree other = (AvlTree) arg0; 
-        return size == other.size && areTreesEqual(this.root, other.root);
+        // size == other.size && 
+        return areTreesEqual(this.root, other.root);
     }
 
     /**
